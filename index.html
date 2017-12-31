@@ -2,7 +2,7 @@
 <!-- saved from url=(0092)http://inst.eecs.berkeley.edu/~cs194-26/fa14/upload/files/proj1/cs194-df/lin_michelle_proj1/ -->
 <html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-<title>Proj 5</title>
+<title>HDR</title>
 <style type="text/css">
 <!--
 body {
@@ -81,9 +81,7 @@ a:hover, a:active, a:focus { /* this group of selectors will give a keyboard nav
   <div class="content">
   
   <center>
-  <h1>Depth Refocusing and Aperture Adjustment with Light Field Data</h1>
-  <h3><b>Sheng-Yu Wang (ade)</b></h3>
-  <p>Html template thanks to Jacob Huynh</p>
+  <h1>High Dynamic Range and Tone Mapping</h1>
   </center>
   
     <h2>Overview</h2>
@@ -94,59 +92,80 @@ a:hover, a:active, a:focus { /* this group of selectors will give a keyboard nav
     the atmosphere is uniform enough), so photos taken at multiple perspectives of the same view are sufficient to express the concept of depth. In this 
     project, this idea is implemented the create virtual refocusing and aperture size changes.</p>
   
-    <h2>Depth Refocusing</h2>
+    <h2>High Dynamic Range Radiance Map Recovery</h2>
     <p>By shifting and averaging the light-field data, the refocusing effect can be achieved. The shifting amount of an image is proportional to the pinhole 
     	postion (u, v), and by changing the proportion c, focusing at different depth is generated. Note that without shifting (c = 0), the average focuses 
     	further away. By increasing the shifting factor c, what actually happened was that the aligned part of the images are getting closer, so that the 
     	more focused part will be moved more up front. This creates the refocusing effect.</p>
-    <center><table width="500" cellpadding="5">
-    <tbody>
-    <tr>
-    <td align="center" valign="center">
-    <img src="./images/focus.gif" width="700">
-    </td>
-    </tr>
-    </tbody></table></center><br>
 
     <center><table width="500" cellpadding="5">
-    <tbody>
-    <tr>
-    <td align="center" valign="center">
-    <img src="./images/focus_0.0.jpg" width="350">
-    <br>c = 0</br>
-    </td>
-    </tr>
-    <tr>
-    <td align="center" valign="center">
-    <img src="./images/focus_0.5.jpg" width="350">
-    <br>c = 0.5</br>
-    </td>
-    <td align="center" valign="center">
-    <img src="./images/focus_1.0.jpg" width="350">
-    <br>c = 1</br>
-    </td>
-    </tr>
-    <tr>
-    <td align="center" valign="center">
-    <img src="./images/focus_1.5.jpg" width="350">
-    <br>c = 1.5</br>
-    </td>
-    <td align="center" valign="center">
-    <img src="./images/focus_2.0.jpg" width="350">
-    <br>c = 2.0</br>
-    </td>
-    </tr>
-    <tr>
-    <td align="center" valign="center">
-    <img src="./images/focus_2.5.jpg" width="350">
-    <br>c = 2.5</br>
-    </td>
-    <td align="center" valign="center">
-    <img src="./images/focus_3.0.jpg" width="350">
-    <br>c = 3.0</br>
-    </td>
-    </tr>
-    </tbody></table></center><br>
+    <tbody><tr>
+        <td align="center" valign="center">
+        <img src="./images/0.jpg" width="100">
+        <br>c = 0.5</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/1.jpg" width="100">
+        <br>c = 1</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/2.jpg" width="100">
+        <br>c = 1</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/3.jpg" width="100">
+        <br>c = 1</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/4.jpg" width="100">
+        <br>c = 1</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/5.jpg" width="100">
+        <br>c = 1</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/6.jpg" width="100">
+        <br>c = 1</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/7.jpg" width="100">
+        <br>c = 1</br>
+        </td>
+    </tr><tr>
+        <td align="center" valign="center">
+        <img src="./images/8.jpg" width="100">
+        <br>c = 0.5</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/9.jpg" width="100">
+        <br>c = 1</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/10.jpg" width="100">
+        <br>c = 1</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/11.jpg" width="100">
+        <br>c = 1</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/12.jpg" width="100">
+        <br>c = 1</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/13.jpg" width="100">
+        <br>c = 1</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/14.jpg" width="100">
+        <br>c = 1</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/15.jpg" width="100">
+        <br>c = 1</br>
+        </td>
+    </tr></tbody></table></center><br>
     
     <h2>Aperture Adjustment</h2>
     <p>Aperture size determines DOF, where larger aperture size gives smaller DOF, and vice versa. With smaller DOF, we will have less range of depth being in focus.
@@ -155,45 +174,6 @@ a:hover, a:active, a:focus { /* this group of selectors will give a keyboard nav
     	Note that the refocusing factor c is choosed to be 1 for all images to have a better visual effect. The virtual aperture is centered at the middle of the pinhole 
     	positions, where we varies the size of the aperture. The smallest on is a 1x1 square in the middle, the second is 3x3, and it goes all the way the 17x17. We can see 
     	that, as predicted, the largest aperture size 17x17 gives the least DOF, while 1x1 square gives the largest DOF.</p>
-
-    <center><table width="500" cellpadding="5">
-    <tbody>
-    <tr>
-    <td align="center" valign="center">
-    <img src="./images/aperture.gif" width="700">
-    </td>
-    </tr>
-    </tbody></table></center><br>
-
-    <center><table width="500" cellpadding="5">
-    <tbody>
-    <tr>
-    <td align="center" valign="center">
-    <img src="./images/app_1.jpg" width="350">
-    <br>size = 1x1</br>
-    </td>
-    </tr>
-    <tr>
-    <td align="center" valign="center">
-    <img src="./images/app_5.jpg" width="350">
-    <br>size = 5x5</br>
-    </td>
-    <td align="center" valign="center">
-    <img src="./images/app_9.jpg" width="350">
-    <br>size = 9x9</br>
-    </td>
-    </tr>
-    <tr>
-    <td align="center" valign="center">
-    <img src="./images/app_13.jpg" width="350">
-    <br>size = 13x13</br>
-    </td>
-    <td align="center" valign="center">
-    <img src="./images/app_17.jpg" width="350">
-    <br>size = 17x17</br>
-    </td>
-    </tr>
-    </tbody></table></center><br>
 
 
     <h2>Summary</h2>
