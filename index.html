@@ -86,101 +86,110 @@ a:hover, a:active, a:focus { /* this group of selectors will give a keyboard nav
   
     <h2>Overview</h2>
 
-    <p>Focusing is strongly related to the concept of depth, which at first glance may requires complicated geometric ray calculations to achieve the 
-    refocusing effect. However, with data-driven techniques such as light-fields, we can achieve many interesting effect like refocusing without creating 
-    a 3D model. Lightfield utilizes the fact that light travels in a straight line in free space (we can approximate atmosphere as the free space, or that 
-    the atmosphere is uniform enough), so photos taken at multiple perspectives of the same view are sufficient to express the concept of depth. In this 
-    project, this idea is implemented the create virtual refocusing and aperture size changes.</p>
+    <p>Note that in real scenes, radiances are continuous and wide-ranged. With pixels having range of discrete values from 0 to 255, normal digita cameras cannot capture the full range of radiance in a single image. Also, note that the mapping between pixel values and radiance is not linear, which further makes the retrival of the radiance more difficult. The project also includes tone mapping, which maps the radiance map back into an image with high dynamic range. The project ideas are inspired by Debevec and Malik 1997 and Durand 2002, and the HDR image series are from Debevec and Malik 1997.</p>
   
     <h2>High Dynamic Range Radiance Map Recovery</h2>
-    <p>By shifting and averaging the light-field data, the refocusing effect can be achieved. The shifting amount of an image is proportional to the pinhole 
-    	postion (u, v), and by changing the proportion c, focusing at different depth is generated. Note that without shifting (c = 0), the average focuses 
-    	further away. By increasing the shifting factor c, what actually happened was that the aligned part of the images are getting closer, so that the 
-    	more focused part will be moved more up front. This creates the refocusing effect.</p>
+    <p>By taking images of the same scenes at different exposure time, we can get images of different light intensities but same radiance. With these data and the assumption that the mapping between the log intensity and pixels is smooth, we can get the radiance map by minimizing the following objective.</p>
+    <img src="./images/objective.jpg" width="500">
+    <p>Note that the first term is to find the mapping between log intensity and pixel values, and the second term is to ensure the mapping function is smooth. Below are the HDR image series and the radiance map results for three color channels.</p>
 
     <center><table width="500" cellpadding="5">
     <tbody><tr>
         <td align="center" valign="center">
-        <img src="./images/0.jpg" width="100">
-        <br>c = 0.5</br>
+        <img src="./images/0.jpg" width="110">
+        <br>t = 32</br>
         </td>
         <td align="center" valign="center">
-        <img src="./images/1.jpg" width="100">
-        <br>c = 1</br>
+        <img src="./images/1.jpg" width="110">
+        <br>t = 16</br>
         </td>
         <td align="center" valign="center">
-        <img src="./images/2.jpg" width="100">
-        <br>c = 1</br>
+        <img src="./images/2.jpg" width="110">
+        <br>t = 8</br>
         </td>
         <td align="center" valign="center">
-        <img src="./images/3.jpg" width="100">
-        <br>c = 1</br>
+        <img src="./images/3.jpg" width="110">
+        <br>t = 4</br>
         </td>
         <td align="center" valign="center">
-        <img src="./images/4.jpg" width="100">
-        <br>c = 1</br>
+        <img src="./images/4.jpg" width="110">
+        <br>t = 2</br>
         </td>
         <td align="center" valign="center">
-        <img src="./images/5.jpg" width="100">
-        <br>c = 1</br>
+        <img src="./images/5.jpg" width="110">
+        <br>t = 1</br>
         </td>
         <td align="center" valign="center">
-        <img src="./images/6.jpg" width="100">
-        <br>c = 1</br>
+        <img src="./images/6.jpg" width="110">
+        <br>t = 1/2</br>
         </td>
         <td align="center" valign="center">
-        <img src="./images/7.jpg" width="100">
-        <br>c = 1</br>
+        <img src="./images/7.jpg" width="110">
+        <br>t = 1/4</br>
         </td>
     </tr><tr>
         <td align="center" valign="center">
-        <img src="./images/8.jpg" width="100">
-        <br>c = 0.5</br>
+        <img src="./images/8.jpg" width="110">
+        <br>t = 1/8</br>
         </td>
         <td align="center" valign="center">
-        <img src="./images/9.jpg" width="100">
-        <br>c = 1</br>
+        <img src="./images/9.jpg" width="110">
+        <br>t = 1/16</br>
         </td>
         <td align="center" valign="center">
-        <img src="./images/10.jpg" width="100">
-        <br>c = 1</br>
+        <img src="./images/10.jpg" width="110">
+        <br>t = 1/32</br>
         </td>
         <td align="center" valign="center">
-        <img src="./images/11.jpg" width="100">
-        <br>c = 1</br>
+        <img src="./images/11.jpg" width="110">
+        <br>t = 1/64</br>
         </td>
         <td align="center" valign="center">
-        <img src="./images/12.jpg" width="100">
-        <br>c = 1</br>
+        <img src="./images/12.jpg" width="110">
+        <br>t = 1/128</br>
         </td>
         <td align="center" valign="center">
-        <img src="./images/13.jpg" width="100">
-        <br>c = 1</br>
+        <img src="./images/13.jpg" width="110">
+        <br>t = 1/256</br>
         </td>
         <td align="center" valign="center">
-        <img src="./images/14.jpg" width="100">
-        <br>c = 1</br>
+        <img src="./images/14.jpg" width="110">
+        <br>t = 1/512</br>
         </td>
         <td align="center" valign="center">
-        <img src="./images/15.jpg" width="100">
-        <br>c = 1</br>
+        <img src="./images/15.jpg" width="110">
+        <br>t = 1/1024</br>
         </td>
     </tr></tbody></table></center><br>
+
+    <center><table width="500" cellpadding="5">
+    <tbody><tr>
+        <td align="center" valign="center">
+        <img src="./images/r_radiance.jpg" width="300">
+        <br>Log radiance result for R channel</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/g_radiance.jpg" width="300">
+        <br>Log radiance result for G channel</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/b_radiance.jpg" width="300">
+        <br>Log radiance result for B channel</br>
+    </tr></tbody></table></center>
     
-    <h2>Aperture Adjustment</h2>
-    <p>Aperture size determines DOF, where larger aperture size gives smaller DOF, and vice versa. With smaller DOF, we will have less range of depth being in focus.
-    	Interestingly, we can do a virtual aperture size change by controlling the number of averaged light-field images. As there're more images, it is similar to having 
-    	a larger aperture size, which give less DOF. <br>
-    	Note that the refocusing factor c is choosed to be 1 for all images to have a better visual effect. The virtual aperture is centered at the middle of the pinhole 
-    	positions, where we varies the size of the aperture. The smallest on is a 1x1 square in the middle, the second is 3x3, and it goes all the way the 17x17. We can see 
-    	that, as predicted, the largest aperture size 17x17 gives the least DOF, while 1x1 square gives the largest DOF.</p>
-
-
-    <h2>Summary</h2>
-    <p>It is really interesting to have data-driven methods that uses the core idea of light traveling in a straight line to create 
-    	effects like refocusing which at the first glance sounds very complicated geometrically. By doing the shifting and averaging,
-    	we avoided the 3D geometry modeling but still have plenty of freedom to play around with depths, which is truly amazing.</p>
-
+    <h2>Tone Mapping</h2>
+    <p>To generate an image with high dynamic range given the radiance map, the essential problem is how to map the continuous radiance into range from 0 to 1. Below is a common global tone mapping approach, which maps intensity I to pixel value (floating point) I/(I+1). Since the radiance is always positive, this mapping successfully maps radiance into the pixel space [0, 1]. On the other hand, the local tone mapping technique is reimplementing the simplified version of Durand 2002. The idea is basically using a bilateral filter to generate a different mapping based on the details (edges, corners, etc.) of the image. This creates an effect that preserves the details of the mapped image, which is shown below. One can see that the local tone mapping method generates image with sharper corners and edges (high frequency components).</p>
+    <center><table width="500" cellpadding="5">
+    <tbody><tr>
+        <td align="center" valign="center">
+        <img src="./images/global_tone-mapping.jpg" width="400">
+        <br>Global tone mapping result</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/local_tone-mapping.jpg" width="400">
+        <br>Local tone mapping result</br>
+        </td>
+    </tr></tbody></table></center>
 
     <!-- end .content --></div>
 <!-- end .container --></div>
