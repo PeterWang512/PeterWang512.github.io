@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0092)http://inst.eecs.berkeley.edu/~cs194-26/fa14/upload/files/proj1/cs194-df/lin_michelle_proj1/ -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>HDR</title>
+<style type="text/css">
+<!--
+body {
+	background: #00000;
+	margin: 0;
+	padding: 0;
+	color: #000;
+	font-style: normal;
+	line-height: 1.4;
+}
+/* ~~ Element/tag selectors ~~ */
+ul, ol, dl { /* Due to variations between browsers, it's best practices to zero padding and margin on lists. For consistency, you can either specify the amounts you want here, or on the list items (LI, DT, DD) they contain. Remember that what you do here will cascade to the .nav list unless you write a more specific selector. */
+	padding: 0;
+	margin: 0;
+}
+h1, h2, h3, h4, h5, h6, p {
+	margin-top: 0;	 /* removing the top margin gets around an issue where margins can escape from their containing div. The remaining bottom margin will hold it away from any elements that follow. */
+	padding-right: 15px;
+	padding-left: 15px; /* adding the padding to the sides of the elements within the divs, instead of the divs themselves, gets rid of any box model math. A nested div with side padding can also be used as an alternate method. */
+}
+a img { /* this selector removes the default blue border displayed in some browsers around an image when it is surrounded by a link */
+	border: none;
+}
+/* ~~ Styling for your site's links must remain in this order - including the group of selectors that create the hover effect. ~~ */
+a:link {
+	color: #42413C;
+	text-decoration: underline; /* unless you style your links to look extremely unique, it's best to provide underlines for quick visual identification */
+}
+a:visited {
+	color: #6E6C64;
+	text-decoration: underline;
+}
+a:hover, a:active, a:focus { /* this group of selectors will give a keyboard navigator the same hover experience as the person using a mouse. */
+	text-decoration: none;
+}
+/* ~~ this fixed width container surrounds all other elements ~~ */
+.container {
+	width: 960px;
+	background: #FFF;
+	margin: 0 auto; /* the auto value on the sides, coupled with the width, centers the layout */
+}
+/* ~~ This is the layout information. ~~ 
+1) Padding is only placed on the top and/or bottom of the div. The elements within this div have padding on their sides. This saves you from any "box model math". Keep in mind, if you add any side padding or border to the div itself, it will be added to the width you define to create the *total* width. You may also choose to remove the padding on the element in the div and place a second div within it with no width and the padding necessary for your design.
+*/
+.content {
+	padding: 10px 0;
+}
+/* ~~ miscellaneous float/clear classes ~~ */
+.fltrt {  /* this class can be used to float an element right in your page. The floated element must precede the element it should be next to on the page. */
+	float: right;
+	margin-left: 8px;
+}
+.fltlft { /* this class can be used to float an element left in your page. The floated element must precede the element it should be next to on the page. */
+	float: left;
+	margin-right: 8px;
+}
+.clearfloat { /* this class can be placed on a <br /> or empty div as the final element following the last floated div (within the #container) if the overflow:hidden on the .container is removed */
+	clear:both;
+	height:0;
+	font-size: 1px;
+	line-height: 0px;
+}
+-->
+</style></head>
+<body>
+<div class="container">
+  <div class="content">
+  
+  <center>
+  <h1>High Dynamic Range and Tone Mapping</h1>
+  </center>
+  
+    <h2>Overview</h2>
+    <p>Note that in real scenes, radiances are continuous and wide-ranged. With pixels having range of discrete values from 0 to 255, normal digita cameras cannot capture the full range of radiance in a single image. Also, note that the mapping between pixel values and radiance is not linear, which further makes the retrival of the radiance more difficult. The project also includes tone mapping, which maps the radiance map back into an image with high dynamic range. The project ideas are inspired by Debevec and Malik 1997 and Durand 2002, and the HDR image series are from Debevec and Malik 1997.</p>
+  
+    <h2>High Dynamic Range Radiance Map Recovery</h2>
+    <p>By taking images of the same scenes at different exposure time, we can get images of different light intensities but same radiance. With these data and the assumption that the mapping between the log intensity and pixels is smooth, we can get the radiance map by minimizing the following objective.</p>
+    <img src="./images/objective.jpg" width="500">
+    <p>Note that the first term is to find the mapping between log intensity and pixel values, and the second term is to ensure the mapping function is smooth. Below are the HDR image series and the radiance map results for three color channels.</p>
+    <center><table width="500" cellpadding="5">
+    <tbody><tr>
+        <td align="center" valign="center">
+        <img src="./images/0.jpg" width="110">
+        <br>t = 32</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/1.jpg" width="110">
+        <br>t = 16</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/2.jpg" width="110">
+        <br>t = 8</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/3.jpg" width="110">
+        <br>t = 4</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/4.jpg" width="110">
+        <br>t = 2</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/5.jpg" width="110">
+        <br>t = 1</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/6.jpg" width="110">
+        <br>t = 1/2</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/7.jpg" width="110">
+        <br>t = 1/4</br>
+        </td>
+    </tr><tr>
+        <td align="center" valign="center">
+        <img src="./images/8.jpg" width="110">
+        <br>t = 1/8</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/9.jpg" width="110">
+        <br>t = 1/16</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/10.jpg" width="110">
+        <br>t = 1/32</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/11.jpg" width="110">
+        <br>t = 1/64</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/12.jpg" width="110">
+        <br>t = 1/128</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/13.jpg" width="110">
+        <br>t = 1/256</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/14.jpg" width="110">
+        <br>t = 1/512</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/15.jpg" width="110">
+        <br>t = 1/1024</br>
+        </td>
+    </tr></tbody></table></center><br>
+    <center><table width="500" cellpadding="5">
+    <tbody><tr>
+        <td align="center" valign="center">
+        <img src="./images/r_radiance.jpg" width="300">
+        <br>Log radiance result for R channel</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/g_radiance.jpg" width="300">
+        <br>Log radiance result for G channel</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/b_radiance.jpg" width="300">
+        <br>Log radiance result for B channel</br>
+    </tr></tbody></table></center>
+    
+    <h2>Tone Mapping</h2>
+    <p>To generate an image with high dynamic range given the radiance map, the essential problem is how to map the continuous radiance into range from 0 to 1. Below is a common global tone mapping approach, which maps intensity I to pixel value (floating point) I/(I+1). Since the radiance is always positive, this mapping successfully maps radiance into the pixel space [0, 1]. On the other hand, the local tone mapping technique is reimplementing the simplified version of Durand 2002. The idea is basically using a bilateral filter to generate a different mapping based on the details (edges, corners, etc.) of the image. This creates an effect that preserves the details of the mapped image, which is shown below. One can see that the local tone mapping method generates image with sharper corners and edges (high frequency components).</p>
+    <center><table width="500" cellpadding="5">
+    <tbody><tr>
+        <td align="center" valign="center">
+        <img src="./images/global_tone-mapping.jpg" width="400">
+        <br>Global tone mapping result</br>
+        </td>
+        <td align="center" valign="center">
+        <img src="./images/local_tone-mapping.jpg" width="400">
+        <br>Local tone mapping result</br>
+        </td>
+    </tr></tbody></table></center>
+    <!-- end .content --></div>
+<!-- end .container --></div>
+</body></html>
