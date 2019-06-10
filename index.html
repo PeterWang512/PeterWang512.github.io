@@ -1,198 +1,115 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<!-- saved from url=(0092)http://inst.eecs.berkeley.edu/~cs194-26/fa14/upload/files/proj1/cs194-df/lin_michelle_proj1/ -->
-<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-<title>HDR</title>
-<style type="text/css">
-<!--
-body {
-	background: #00000;
-	margin: 0;
-	padding: 0;
-	color: #000;
-	font-style: normal;
-	line-height: 1.4;
-}
-
-/* ~~ Element/tag selectors ~~ */
-ul, ol, dl { /* Due to variations between browsers, it's best practices to zero padding and margin on lists. For consistency, you can either specify the amounts you want here, or on the list items (LI, DT, DD) they contain. Remember that what you do here will cascade to the .nav list unless you write a more specific selector. */
-	padding: 0;
-	margin: 0;
-}
-h1, h2, h3, h4, h5, h6, p {
-	margin-top: 0;	 /* removing the top margin gets around an issue where margins can escape from their containing div. The remaining bottom margin will hold it away from any elements that follow. */
-	padding-right: 15px;
-	padding-left: 15px; /* adding the padding to the sides of the elements within the divs, instead of the divs themselves, gets rid of any box model math. A nested div with side padding can also be used as an alternate method. */
-}
-a img { /* this selector removes the default blue border displayed in some browsers around an image when it is surrounded by a link */
-	border: none;
-}
-/* ~~ Styling for your site's links must remain in this order - including the group of selectors that create the hover effect. ~~ */
-a:link {
-	color: #42413C;
-	text-decoration: underline; /* unless you style your links to look extremely unique, it's best to provide underlines for quick visual identification */
-}
-a:visited {
-	color: #6E6C64;
-	text-decoration: underline;
-}
-a:hover, a:active, a:focus { /* this group of selectors will give a keyboard navigator the same hover experience as the person using a mouse. */
-	text-decoration: none;
-}
-
-/* ~~ this fixed width container surrounds all other elements ~~ */
-.container {
-	width: 960px;
-	background: #FFF;
-	margin: 0 auto; /* the auto value on the sides, coupled with the width, centers the layout */
-}
-
-/* ~~ This is the layout information. ~~ 
-
-1) Padding is only placed on the top and/or bottom of the div. The elements within this div have padding on their sides. This saves you from any "box model math". Keep in mind, if you add any side padding or border to the div itself, it will be added to the width you define to create the *total* width. You may also choose to remove the padding on the element in the div and place a second div within it with no width and the padding necessary for your design.
-
-*/
-.content {
-
-	padding: 10px 0;
-}
-
-/* ~~ miscellaneous float/clear classes ~~ */
-.fltrt {  /* this class can be used to float an element right in your page. The floated element must precede the element it should be next to on the page. */
-	float: right;
-	margin-left: 8px;
-}
-.fltlft { /* this class can be used to float an element left in your page. The floated element must precede the element it should be next to on the page. */
-	float: left;
-	margin-right: 8px;
-}
-.clearfloat { /* this class can be placed on a <br /> or empty div as the final element following the last floated div (within the #container) if the overflow:hidden on the .container is removed */
-	clear:both;
-	height:0;
-	font-size: 1px;
-	line-height: 0px;
-}
--->
-</style></head>
-
-<body>
-
-<div class="container">
-  <div class="content">
-  
-  <center>
-  <h1>High Dynamic Range and Tone Mapping</h1>
-  </center>
-  
-    <h2>Overview</h2>
-
-    <p>Note that in real scenes, radiances are continuous and wide-ranged. With pixels having range of discrete values from 0 to 255, normal digita cameras cannot capture the full range of radiance in a single image. Also, note that the mapping between pixel values and radiance is not linear, which further makes the retrival of the radiance more difficult. The project also includes tone mapping, which maps the radiance map back into an image with high dynamic range. The project ideas are inspired by Debevec and Malik 1997 and Durand 2002, and the HDR image series are from Debevec and Malik 1997.</p>
-  
-    <h2>High Dynamic Range Radiance Map Recovery</h2>
-    <p>By taking images of the same scenes at different exposure time, we can get images of different light intensities but same radiance. With these data and the assumption that the mapping between the log intensity and pixels is smooth, we can get the radiance map by minimizing the following objective.</p>
-    <img src="./images/objective.jpg" width="500">
-    <p>Note that the first term is to find the mapping between log intensity and pixel values, and the second term is to ensure the mapping function is smooth. Below are the HDR image series and the radiance map results for three color channels.</p>
-
-    <center><table width="500" cellpadding="5">
-    <tbody><tr>
-        <td align="center" valign="center">
-        <img src="./images/0.jpg" width="110">
-        <br>t = 32</br>
-        </td>
-        <td align="center" valign="center">
-        <img src="./images/1.jpg" width="110">
-        <br>t = 16</br>
-        </td>
-        <td align="center" valign="center">
-        <img src="./images/2.jpg" width="110">
-        <br>t = 8</br>
-        </td>
-        <td align="center" valign="center">
-        <img src="./images/3.jpg" width="110">
-        <br>t = 4</br>
-        </td>
-        <td align="center" valign="center">
-        <img src="./images/4.jpg" width="110">
-        <br>t = 2</br>
-        </td>
-        <td align="center" valign="center">
-        <img src="./images/5.jpg" width="110">
-        <br>t = 1</br>
-        </td>
-        <td align="center" valign="center">
-        <img src="./images/6.jpg" width="110">
-        <br>t = 1/2</br>
-        </td>
-        <td align="center" valign="center">
-        <img src="./images/7.jpg" width="110">
-        <br>t = 1/4</br>
-        </td>
-    </tr><tr>
-        <td align="center" valign="center">
-        <img src="./images/8.jpg" width="110">
-        <br>t = 1/8</br>
-        </td>
-        <td align="center" valign="center">
-        <img src="./images/9.jpg" width="110">
-        <br>t = 1/16</br>
-        </td>
-        <td align="center" valign="center">
-        <img src="./images/10.jpg" width="110">
-        <br>t = 1/32</br>
-        </td>
-        <td align="center" valign="center">
-        <img src="./images/11.jpg" width="110">
-        <br>t = 1/64</br>
-        </td>
-        <td align="center" valign="center">
-        <img src="./images/12.jpg" width="110">
-        <br>t = 1/128</br>
-        </td>
-        <td align="center" valign="center">
-        <img src="./images/13.jpg" width="110">
-        <br>t = 1/256</br>
-        </td>
-        <td align="center" valign="center">
-        <img src="./images/14.jpg" width="110">
-        <br>t = 1/512</br>
-        </td>
-        <td align="center" valign="center">
-        <img src="./images/15.jpg" width="110">
-        <br>t = 1/1024</br>
-        </td>
-    </tr></tbody></table></center><br>
-
-    <center><table width="500" cellpadding="5">
-    <tbody><tr>
-        <td align="center" valign="center">
-        <img src="./images/r_radiance.jpg" width="300">
-        <br>Log radiance result for R channel</br>
-        </td>
-        <td align="center" valign="center">
-        <img src="./images/g_radiance.jpg" width="300">
-        <br>Log radiance result for G channel</br>
-        </td>
-        <td align="center" valign="center">
-        <img src="./images/b_radiance.jpg" width="300">
-        <br>Log radiance result for B channel</br>
-    </tr></tbody></table></center>
+<html>
+<head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <title>Sheng-Yu Wang - UC Berkeley </title>
+    <style type="text/css">
+/*        body {
+            font-family: "Lato", sans-serif; 
+            font-weight:300;
+            font-size:18px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 1100px;
+        }*/
+    </style>
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+</head>
+    <body><table border="0" width="800px" align="center"><tbody><tr><td>
     
-    <h2>Tone Mapping</h2>
-    <p>To generate an image with high dynamic range given the radiance map, the essential problem is how to map the continuous radiance into range from 0 to 1. Below is a common global tone mapping approach, which maps intensity I to pixel value (floating point) I/(I+1). Since the radiance is always positive, this mapping successfully maps radiance into the pixel space [0, 1]. On the other hand, the local tone mapping technique is reimplementing the simplified version of Durand 2002. The idea is basically using a bilateral filter to generate a different mapping based on the details (edges, corners, etc.) of the image. This creates an effect that preserves the details of the mapped image, which is shown below. One can see that the local tone mapping method generates image with sharper corners and edges (high frequency components).</p>
-    <center><table width="500" cellpadding="5">
-    <tbody><tr>
-        <td align="center" valign="center">
-        <img src="./images/global_tone-mapping.jpg" width="400">
-        <br>Global tone mapping result</br>
-        </td>
-        <td align="center" valign="center">
-        <img src="./images/local_tone-mapping.jpg" width="400">
-        <br>Local tone mapping result</br>
-        </td>
-    </tr></tbody></table></center>
+        </td><td valign="top">
+<!--            <img src="images/cmuscslogo.gif">
+                <img src="images/rilogo.png"> -->
+        <br>
+        <table style="font-size: 12pt;" border="0" width="100%">
+            <tbody><tr>
+                <td width="47%">
+                    <!-- <img width="300" src="./index_files/mypic.jpeg" border="0"> -->
+                    <img width="275" src="./index_files/pic.jpg" border="0">
+                </td>
+                <td>
+                    <font face='Lato' size="6"> 
+                        Sheng-Yu Wang<br><br>
+                    </font>
+                    <font face='Lato' size="4"> 
+                        Student Researcher<br>
+                        UC Berkeley<br><br>
+                        sheng-yu_wang at berkeley.edu<br>
+                        [<a href="https://github.com/PeterWang512" border="0">GitHub</a>]
+                        [<a href="https://peterwang512.github.io" border="0">Google Scholar (Coming soon!)</a>]<br>
+                     <!--   CV: <a href="CV.pdf">PDF</a> <br> -->
+                    </font>
+                </td>
+            </tr>
+        </tbody></table> 
+        <p>
+        </p><hr size="2" align="left" noshade="">
+        <p>
+        
+        <font face='Lato'> 
+        <span style="font-size: 12pt;">
+        I am a student researcher at BAIR. Recently, I received my BA degree from UC Berkeley where I spent one wonderful year at BAIR, working with Dr. <a href="http://www.oliverwang.info/">Oliver Wang</a>, Dr. <a href="http://richzhang.github.io">Richard Zhang</a>, Professor <a href="http://andrewowens.com">Andrew Owens</a> and Professor <a href="http://www.eecs.berkeley.edu/~efros/">Alexei (Alyosha) Efros</a>. Prior to joining BAIR, I worked with Dr. <a href="http://www.yf.io">Fisher Yu</a> at Berkeley DeepDrive and Professor <a href="http://research.physics.berkeley.edu/crommie/">Michael Crommie</a> on condensed matter physics research.
 
-    <!-- end .content --></div>
-<!-- end .container --></div>
+
+        <!-- <br><br> -->
+        </p><hr size="2" align="left" noshade="">
 
 
-</body></html>
+<!--         <h2>News </h2>
+        <font face='Lato'>
+            <span style="font-size: 10pt;">
+            <b>[May 2019]</b> Try anti-aliasing your convnet <a href="https://github.com/adobe/antialiased-cnns">here</a>!<br>
+            <b>[Apr 2019]</b> Our work on anti-aliasing convolutional networks has been accepted to ICML 2019.<br>
+            <b>[Aug 2018]</b> I will be presenting at the Thesis Fast Forward session at SIGGRAPH on Tuesday 8/14, 2:00pm.<br>
+            <b>[Jun 2018]</b> We will be presenting our <a href="https://richzhang.github.io/PerceptualSimilarity/">project</a> on perceptual metrics at CVPR, Tuesday 6/19, 10:10am. <b><i>Try our metric <a href="https://github.com/richzhang/PerceptualSimilarity">here</a>!</i></b><br>
+            </span>
+
+        </p><hr size="2" align="left" noshade=""> -->
+
+
+        <h2>Research </h2>
+        <font face='Lato'>
+            <span style="font-size: 12pt;">
+            I started out working on understanding the structures and properties of materials, and currently my research interest are studying  those of perception. Ｃurrently, I am interested in 
+
+
+        <h2>Publications </h2>
+        <font face='Lato'>
+            <table cellspacing="15">
+				<tbody>
+                <tr>
+                    <td width="30%" align=left>
+                    <!-- height="74" -->
+                        <center>
+                        <img width="125" align="center" src="./index_files/aacnns_2019_teaser.gif" border="0">
+                        <img width="125" align="center" src="./index_files/aacnns_2019_teaser2.gif" border="0">
+                        </center>
+                    </td>
+                    <td>
+                        <span style="font-size: 13pt;">
+                        <b>Detecting Photoshopped Faces by Scripting Photoshop</b> <br>
+                        <span style="font-size: 11pt;">
+                        Sheng-Yu Wang, <a href="http://www.oliverwang.info/">Oliver Wang</a>, <a href="http://andrewowens.com">Andrew Owens</a>, <a href="http://richzhang.github.io">Richard Zhang</a>, <a href="http://www.eecs.berkeley.edu/~efros/">Alexei A. Efros</a>. <br>
+                        In submission, 2019. <br>
+                        [<a href="https://peterwang512.github.io">Paper (Coming soon!)</a>]
+                        <!-- [<a href="https://arxiv.org/abs/1904.11486">Paper</a>] -->
+                        [<a href="https://peterwang512.github.io/PhotoShopForensics">Webpage</a>]
+                        [<a href="https://github.com/peterwang512/PhotoShopForensics">GitHub (Coming soon!)</a>]
+                        [<a href="https://peterwang512.github.io">Bibtex (Coming soon!)</a>]
+                        <br>
+                    </td>
+                </tr>
+
+            </tbody></table>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-75897335-1', 'auto');
+  ga('send', 'pageview');
+</script>
+            
+</font></td></tr></tbody></table><iframe frameborder="0" scrolling="no" style="border: 0px; display: none; background-color: transparent;"></iframe><div id="GOOGLE_INPUT_CHEXT_FLAG" input="null" input_stat="{&quot;tlang&quot;:true,&quot;tsbc&quot;:true,&quot;pun&quot;:true,&quot;mk&quot;:false,&quot;ss&quot;:true}" style="display: none;"></div></body></html>
+
